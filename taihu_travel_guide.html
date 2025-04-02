@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>太湖两天旅游指南</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* 基础样式 */
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #4a9bcf;
+            --accent-color: #e67e22;
+            --text-color: #2c3e50;
+            --light-text: #7f8c8d;
+            --border-color: #ecf0f1;
+            --light-bg: #f8f9fa;
+            --info-color: #2980b9;
+            --food-color: #e74c3c;
+            --transport-color: #27ae60;
+            --hotel-color: #9b59b6;
+            --warning-color: #f39c12;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background: white;
+            width: 210mm;
+            height: 297mm;
+            margin: 0 auto;
+            padding: 10mm;
+            position: relative;
+        }
+
+        /* 打印样式 */
+        @media print {
+            body {
+                width: 210mm;
+                height: 297mm;
+                margin: 0;
+                padding: 10mm;
+                print-color-adjust: exact;
+                -webkit-print-color-adjust: exact;
+            }
+
+            .no-print {
+                display: none !important;
+            }
+
+            .page-border {
+                border: none;
+            }
+
+            a {
+                text-decoration: none;
+                color: var(--text-color);
+            }
+        }
+
+        /* 页面布局 */
+        .page-border {
+            border: 1px dashed #ccc;
+            height: 100%;
+            position: relative;
+            padding: 5mm;
+        }
+
+        .container {
+            display: grid;
+            grid-template-rows: auto auto 1fr auto;
+            gap: 15px;
+            height: 100%;
+        }
+
+        /* 标题区域 */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 10px;
+            margin-bottom: 5px;
+        }
+
+        .title {
+            flex: 1;
+        }
+
+        .title h1 {
+            font-size: 24px;
+            color: var(--primary-color);
+            margin-bottom: 5px;
+        }
+
+        .title-info {
+            display: flex;
+            font-size: 12px;
+            color: var(--light-text);
+            gap: 15px;
+        }
+
+        .weather-info {
+            background: var(--light-bg);
+            padding: 5px 10px;
+            border-radius: 4px;
+            text-align: right;
+            font-size: 12px;
+        }
+
+        /* 行程概览 */
+        .overview {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .day-summary {
+            background: var(--light-bg);
+            padding: 10px;
+            border-radius: 4px;
+            border-left: 3px solid var(--primary-color);
+        }
+
+        .day-summary h3 {
+            font-size: 14px;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+        }
+
+        .day-summary h3 i {
+            margin-right: 5px;
+            color: var(--primary-color);
+        }
+
+        .day-summary ul {
+            list-style-type: none;
+            padding-left: 20px;
+            font-size: 12px;
+        }
+
+        .day-summary li {
+            margin-bottom: 3px;
+            display: flex;
+            align-items: center;
+        }
+
+        .day-summary li i {
+            width: 16px;
+            margin-right: 5px;
+            text-align: center;
+        }
+
+        /* 详细行程表 */
+        .itinerary {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .itinerary-day {
+            margin-bottom: 15px;
+        }
+
+        .itinerary-day h3 {
+            font-size: 14px;
+            margin-bottom: 8px;
+            color: var(--primary-color);
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 5px;
+        }
+
+        .timeline {
+            position: relative;
+            padding-left: 22px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 7px;
+            top: 0;
+            height: 100%;
+            width: 2px;
+            background: var(--border-color);
+        }
+
+        .event {
+            position: relative;
+            margin-bottom: 15px;
+            font-size: 12px;
+        }
+
+        .event::before {
+            content: '';
+            position: absolute;
+            left: -22px;
+            top: 5px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: white;
+            border: 2px solid var(--primary-color);
+        }
+
+        .event-attraction::before {
+            background: var(--info-color);
+            border-color: var(--info-color);
+        }
+
+        .event-food::before {
+            background: var(--food-color);
+            border-color: var(--food-color);
+        }
+
+        .event-hotel::before {
+            background: var(--hotel-color);
+            border-color: var(--hotel-color);
+        }
+
+        .event-time {
+            font-weight: 500;
+            display: block;
+            margin-bottom: 2px;
+        }
+
+        .event-title {
+            font-weight: 500;
+            margin-bottom: 2px;
+        }
+
+        .event-location {
+            color: var(--light-text);
+            font-size: 11px;
+            margin-bottom: 2px;
+        }
+
+        .event-details {
+            font-size: 11px;
+            color: var(--text-color);
+        }
+
+        /* 底部信息区 */
+        .footer {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 15px;
+            margin-top: auto;
+            font-size: 12px;
+        }
+
+        .transport, .tips {
+            background: var(--light-bg);
+            padding: 10px;
+            border-radius: 4px;
+        }
+
+        .transport h3, .tips h3 {
+            font-size: 14px;
+            margin-bottom: 5px;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+        }
+
+        .transport h3 i, .tips h3 i {
+            margin-right: 5px;
+        }
+
+        .transport ul, .tips ul {
+            list-style-type: none;
+            padding-left: 5px;
+        }
+
+        .transport li, .tips li {
+            margin-bottom: 5px;
+            position: relative;
+            padding-left: 20px;
+            font-size: 11px;
+        }
+
+        .transport li i, .tips li i {
+            position: absolute;
+            left: 0;
+            top: 4px;
+            color: var(--transport-color);
+        }
+
+        .tips li i {
+            color: var(--warning-color);
+        }
+
+        .contacts {
+            margin-top: 10px;
+        }
+
+        .contacts div {
+            margin-bottom: 3px;
+            font-size: 11px;
+        }
+
+        .icon-label {
+            display: inline-block;
+            margin-right: 5px;
+            font-size: 10px;
+            width: 60px;
+            text-align: center;
+            padding: 1px 4px;
+            border-radius: 3px;
+            color: white;
+        }
+
+        .icon-attraction {
+            background-color: var(--info-color);
+        }
+
+        .icon-food {
+            background-color: var(--food-color);
+        }
+
+        .icon-transport {
+            background-color: var(--transport-color);
+        }
+
+        .icon-hotel {
+            background-color: var(--hotel-color);
+        }
+
+        /* 打印按钮 */
+        .print-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            font-family: 'Noto Sans SC', sans-serif;
+            z-index: 100;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .print-btn i {
+            margin-right: 5px;
+        }
+
+        .print-btn:hover {
+            background: var(--secondary-color);
+        }
+    </style>
+</head>
+<body>
+    <button class="print-btn no-print" onclick="window.print()">
+        <i class="fas fa-print"></i> 打印指南
+    </button>
+
+    <div class="page-border">
+        <div class="container">
+            <!-- 标题区域 -->
+            <div class="header">
+                <div class="title">
+                    <h1>太湖两天旅游指南</h1>
+                    <div class="title-info">
+                        <div><i class="far fa-calendar-alt"></i> 游览时间：4月5日-6日（周五-周六）</div>
+                        <div><i class="fas fa-user"></i> 适合人群：家庭、情侣、摄影爱好者</div>
+                    </div>
+                </div>
+                <div class="weather-info">
+                    <div><i class="fas fa-temperature-high"></i> 周五：23°C，多云转晴</div>
+                    <div><i class="fas fa-temperature-low"></i> 周六：23°C，多云</div>
+                    <div><i class="fas fa-wind"></i> 北风1-3级</div>
+                </div>
+            </div>
+
+            <!-- 行程概览 -->
+            <div class="overview">
+                <div class="day-summary">
+                    <h3><i class="fas fa-calendar-day"></i> 第一天：无锡太湖</h3>
+                    <ul>
+                        <li><i class="fas fa-monument"></i> 太湖鼋头渚风景区 (3-4小时)</li>
+                        <li><i class="fas fa-utensils"></i> 品尝太湖三白等特色美食</li>
+                        <li><i class="fas fa-mountain"></i> 太湖渔洋山风景区 (2-3小时)</li>
+                        <li><i class="fas fa-hotel"></i> 入住无锡太湖华邑酒店或皇冠假日酒店</li>
+                    </ul>
+                </div>
+                <div class="day-summary">
+                    <h3><i class="fas fa-calendar-day"></i> 第二天：苏州太湖</h3>
+                    <ul>
+                        <li><i class="fas fa-water"></i> 苏州市吴中太湖旅游区 (2-3小时)</li>
+                        <li><i class="fas fa-leaf"></i> 太湖湖滨国家湿地 (1-2小时)</li>
+                        <li><i class="fas fa-hiking"></i> 穹窿山景区及孙武文化园 (2-3小时)</li>
+                        <li><i class="fas fa-hotel"></i> 入住苏州太湖假日酒店</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 详细行程表 -->
+            <div class="itinerary">
+                <div class="itinerary-day">
+                    <h3>第一天详细行程</h3>
+                    <div class="timeline">
+                        <div class="event event-attraction">
+                            <span class="event-time">09:00 - 13:00</span>
+                            <div class="event-title">太湖鼋头渚风景区</div>
+                            <div class="event-location"><i class="fas fa-map-marker-alt"></i> 无锡市鼋渚路1号</div>
+                            <div class="event-details">
+                                主要景点：充山隐秀、太湖仙岛、无锡旅情。游客中心位于景区东南角，可获取地图和导览信息。门票约115元/人。
+                            </div>
+                        </div>
+
+                        <div class="event event-food">
+                            <span class="event-time">13:00 - 14:30</span>
+                            <div class="event-title">午餐时间</div>
+                            <div class="event-location"><i class="fas fa-map-marker-alt"></i> 鼋头渚景区内或附近餐厅</div>
+                            <div class="event-details">
+                                推荐品尝太湖特色菜肴如太湖三白（白鱼、白虾、银鱼）、无锡排骨等本地风味。
+                            </div>
+                        </div>
+
+                        <div class="event event-attraction">
+                            <span class="event-time">15:00 - 18:00</span>
+                            <div class="event-title">太湖渔洋山风景区</div>
+                            <div class="event-location"><i class="fas fa-map-marker-alt"></i> 无锡太湖国家旅游度假区环太湖大道16号</div>
+                            <div class="event-details">
+                                建议体验索滑道（需在售票处购票）。游客中心位于景区南侧，停车场位于景区南侧。
+                            </div>
+                        </div>
+
+                        <div class="event event-hotel">
+                            <span class="event-time">19:00</span>
+                            <div class="event-title">入住酒店</div>
+                            <div class="event-location"><i class="fas fa-map-marker-alt"></i> 无锡太湖华邑酒店或无锡太湖皇冠假日酒店</div>
+                            <div class="event-details">
+                                两家酒店均为高星级酒店，提供舒适住宿和太湖景观。华邑酒店地址：金融六街15号，皇冠假日：太湖大道1888号。
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="itinerary-day">
+                    <h3>第二天详细行程</h3>
+                    <div class="timeline">
+                        <div class="event event-attraction">
+                            <span class="event-time">08:30 - 11:00</span>
+                            <div class="event-title">苏州市吴中太湖旅游区</div>
+                            <div class="event-location"><i class="fas fa-map-marker-alt"></i> 东山镇湖滨路8号</div>
+                            <div class="event-details">
+                                欣赏太湖湖光山色，了解吴地文化。景区内环境优美，湖景开阔。
+                            </div>
+                        </div>
+
+                        <div class="event event-attraction">
+                            <span class="event-time">11:00 - 12:30</span>
+                            <div class="event-title">太湖湖滨国家湿地</div>
+                            <div class="event-location"><i class="fas fa-map-marker-alt"></i> 胥香路与环太湖大道交汇处</div>
+                            <div class="event-details">
+                                观赏湿地生态和水鸟，感受湿地环境的自然之美。适合拍照和短途徒步。
+                            </div>
+                        </div>
+
+                        <div class="event event-food">
+                            <span class="event-time">12:30 - 14:00</span>
+                            <div class="event-title">午餐时间</div>
+                            <div class="event-location"><i class="fas fa-map-marker-alt"></i> 太湖旅游区周边餐厅</div>
+                            <div class="event-details">
+                                推荐品尝东山白鱼羹、苏州太湖蟹粉狮子头等本地特色菜。
+                            </div>
+                        </div>
+
+                        <div class="event event-attraction">
+                            <span class="event-time">14:30 - 17:30</span>
+                            <div class="event-title">穹窿山景区与孙武文化园</div>
+                            <div class="event-location"><i class="fas fa-map-marker-alt"></i> 藏书镇兵圣路穹窿山麓</div>
+                            <div class="event-details">
+                                主要景点：三茅峰、二茅峰、茅蓬坞。参观孙武文化园及孙子兵法博物馆，了解兵圣孙武文化。
+                            </div>
+                        </div>
+
+                        <div class="event event-hotel">
+                            <span class="event-time">18:00</span>
+                            <div class="event-title">入住酒店/返程</div>
+                            <div class="event-location"><i class="fas fa-map-marker-alt"></i> 苏州太湖假日酒店或智选假日酒店</div>
+                            <div class="event-details">
+                                苏州太湖假日酒店：孙武路2017号A座；太湖智选假日酒店：太湖旅游度假区孙武路2017号B座。
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 底部信息区 -->
+            <div class="footer">
+                <div class="transport">
+                    <h3><i class="fas fa-car"></i> 交通信息</h3>
+                    <ul>
+                        <li><i class="fas fa-route"></i> <b>无锡景区间</b>：鼋头渚至渔洋山约17.6公里，驾车约17分钟（实时路况）</li>
+                        <li><i class="fas fa-route"></i> <b>无锡至苏州</b>：约50公里，驾车约1小时，建议走沪宁高速</li>
+                        <li><i class="fas fa-route"></i> <b>苏州景区间</b>：吴中太湖至穹窿山约15公里，驾车约25分钟</li>
+                        <li><i class="fas fa-subway"></i> <b>公共交通</b>：无锡53路可到达鼋头渚，苏州旅游3线可到达穹窿山</li>
+                        <li><i class="fas fa-taxi"></i> <b>出租车</b>：景区之间建议使用打车软件或包车服务，更加便捷</li>
+                        <li><i class="fas fa-info-circle"></i> <b>温馨提示</b>：周五为工作日，建议错峰出行避免拥堵</li>
+                    </ul>
+                </div>
+
+                <div class="tips">
+                    <h3><i class="fas fa-info-circle"></i> 实用提示</h3>
+                    <ul>
+                        <li><i class="fas fa-exclamation-triangle"></i> 周五多云转晴，周六多云，建议带防晒用品</li>
+                        <li><i class="fas fa-ticket-alt"></i> 清明小长假期间，门票需提前在线预订</li>
+                        <li><i class="fas fa-umbrella"></i> 气温23°C适宜，但早晚温差大，建议携带外套</li>
+                        <li><i class="fas fa-camera"></i> 天气晴好，太湖日出日落是摄影佳时</li>
+                        <li><i class="fas fa-parking"></i> 周末景区可能较为拥挤，建议错峰停车</li>
+                        <li><i class="fas fa-clock"></i> 建议周五早点出发，避开上班高峰</li>
+                    </ul>
+                    
+                    <div class="contacts">
+                        <div><i class="fas fa-phone"></i> <b>旅游咨询</b>：0510-12301（无锡）/0512-12301（苏州）</div>
+                        <div><i class="fas fa-ambulance"></i> <b>紧急救援</b>：120</div>
+                        <div><i class="fas fa-shield-alt"></i> <b>报警电话</b>：110</div>
+                    </div>
+                    
+                    <div style="margin-top: 10px; font-size: 10px; text-align: right;">
+                        <span class="icon-label icon-attraction">景点</span>
+                        <span class="icon-label icon-food">餐饮</span>
+                        <span class="icon-label icon-hotel">住宿</span>
+                        <span class="icon-label icon-transport">交通</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 简单的打印功能
+        document.querySelector('.print-btn').addEventListener('click', function() {
+            window.print();
+        });
+    </script>
+</body>
+</html> 
